@@ -7,58 +7,57 @@ import java.io.FileInputStream;
 import javazoom.jl.player.Player;
 
 public class Music extends Thread {
-	
-	private Player player; //javazoom ¶óÀÌºê·¯¸® »ç¿ë
-	private boolean isLoop;
-	private File file;
-	private FileInputStream fis;
-	private BufferedInputStream bis;
-	
-	public Music(String name, boolean isLoop) {
-		// playÇÒ À½¾Ç ÀÌ¸§°ú ¹İº¹ ¿©ºÎ¸¦ ¹Ş´Â´Ù. 
-		try {
-			this.isLoop = isLoop;
-			file = new File(Main.class.getResource("../music/"+ name).toURI());
-			fis = new FileInputStream(file);
-			bis = new BufferedInputStream(fis);
-			player = new Player(bis);
-					
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	public int getTime() {
-		//ÇöÀç ÇÃ·¹ÀÌ À½¾ÇÀÌ ¾î´À À§Ä¡¿¡¼­ ÇÃ·¹ÀÌ µÇ´ÂÁö ¹İÈ¯ 10ÃÊÀÏ°æ¿ì 10,000 ¹İÈ¯ 0.001ÃÊ ±îÁö ºĞ¼® °¡´É
-		if(player == null)
-			return 0;
-		return player.getPosition();
-	}
-	
-	public void close() {
-		// Æ¯Á¤ ÀÌÀ¯·Î °îÀ» Áß´ÜÇÒ °æ¿ì ÇØ´ç °îÀ» ¾ÈÀüÇÏ°Ô Á¾·áÇÏ±â À§ÇÑ ÇÔ¼ö
-		isLoop = false;
-		player.close();
-		this.interrupt();
-		// ÇØ´ç ¾²·¹µå¸¦ ÁßÁö »óÅÂ·Î ¸¸µç´Ù.
-	}
-	
-	@Override
-	public void run() {
-		//Thread¸¦ »ó¼ÓÇÑ°æ¿ì ÇÊ¼ö
-		try {
-			do {
-				//isLoop °¡ trueÀÎ°æ¿ì ´Ù½Ã Àç»ı
-				player.play();
-				fis = new FileInputStream(file);
-				bis = new BufferedInputStream(fis);
-				player = new Player(bis);
-			} while(isLoop);
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.getMessage());
-		}
-	}
+
+    private Player player; //use javazoom
+    private boolean isLoop;
+    private File file;
+    private FileInputStream fis;
+    private BufferedInputStream bis;
+
+    public Music(String name, boolean isLoop) {
+        // play í•  ìŒì•… ì´ë¦„ê³¼ ë°˜ë³µ ì—¬ë¶€ë¥¼ ë°›ëŠ”ë‹¤.
+        try {
+            this.isLoop = isLoop;
+            file = new File(Main.class.getResource("../music/"+ name).toURI());
+            fis = new FileInputStream(file);
+            bis = new BufferedInputStream(fis);
+            player = new Player(bis);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public int getTime() {
+        //í˜„ì¬ í”Œë ˆì´ ìŒì•…ì´ ì–´ëŠ ìœ„ì¹˜ì—ì„œ í”Œë ˆì´ ë˜ëŠ”ì§€ ë°˜í™˜ 10ì´ˆì¼ê²½ìš° 10,000 ë°˜í™˜ 0.001ì´ˆ ê¹Œì§€ ë¶„ì„ ê°€ëŠ¥
+        if(player == null)
+            return 0;
+        return player.getPosition();
+    }
+
+    public void close() {
+        // íŠ¹ì • ì´ìœ ë¡œ ê³¡ì„ ì¤‘ë‹¨í•  ê²½ìš° í•´ë‹¹ ê³¡ì„ ì•ˆì „í•˜ê²Œ ì¢…ë£Œí•˜ê¸° ìœ„í•œ í•¨ìˆ˜
+        isLoop = false;
+        player.close();
+        this.interrupt();
+        // í•´ë‹¹ ì“°ë ˆë“œë¥¼ ì¤‘ì§€ ìƒíƒœë¡œ ë§Œë“ ë‹¤.
+    }
+
+    @Override
+    public void run() {
+        //Thread ë¥¼ ìƒì†í•œê²½ìš° í•„ìˆ˜
+        try {
+            do {
+                //isLoop ê°€ true ì¸ ê²½ìš° ë‹¤ì‹œ ì¬ìƒ
+                player.play();
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                player = new Player(bis);
+            } while(isLoop);
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println(e.getMessage());
+        }
+    }
 
 }
