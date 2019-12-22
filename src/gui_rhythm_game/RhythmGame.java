@@ -22,18 +22,34 @@ public class RhythmGame extends JFrame {
 	private ImageIcon exitMenuButton = new ImageIcon(Main.class.getResource("../images/menu/exit.png"));
 	private ImageIcon exitMenuButtonOn = new ImageIcon(Main.class.getResource("../images/menu/exitOn.png"));
 
-	private ImageIcon startbutton = new ImageIcon(Main.class.getResource("../images/buttens/startbutton.png"));
-	private ImageIcon startbuttonOn = new ImageIcon(Main.class.getResource("../images/buttens/startbuttonOn.png"));
-	private ImageIcon exitbutton = new ImageIcon(Main.class.getResource("../images/buttens/exitbutton.png"));
-	private ImageIcon exitbuttonOn = new ImageIcon(Main.class.getResource("../images/buttens/exitbuttonOn.png"));
+	private ImageIcon startbutton = new ImageIcon(Main.class.getResource("../images/buttons/startbutton.png"));
+	private ImageIcon startbuttonOn = new ImageIcon(Main.class.getResource("../images/buttons/startbuttonOn.png"));
+	private ImageIcon exitbutton = new ImageIcon(Main.class.getResource("../images/buttons/exitbutton.png"));
+	private ImageIcon exitbuttonOn = new ImageIcon(Main.class.getResource("../images/buttons/exitbuttonOn.png"));
+
+	private ImageIcon leftButton = new ImageIcon(Main.class.getResource("../images/buttons/leftButton.png"));
+	private ImageIcon leftButtonOn = new ImageIcon(Main.class.getResource("../images/buttons/leftButtonOn.png"));
+	private ImageIcon rightButton = new ImageIcon(Main.class.getResource("../images/buttons/rightButton.png"));
+	private ImageIcon rightButtonOn = new ImageIcon(Main.class.getResource("../images/buttons/rightButtonOn.png"));
+
 
 	private Image background; // background image object
+	private Image titleImage = new ImageIcon(Main.class.getResource("../images/musicImage/Drive_YuYoon.png")).getImage();
+	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/musicImage/Drive_with_my_friend_intro.png")).getImage();
+
 	private JLabel menubar = new JLabel(new ImageIcon(Main.class.getResource("../images/menu/menubar.jpg")));
 	private JButton exitMenubt = new JButton(exitMenuButton);
 	private JButton startbt = new JButton(startbutton);
 	private JButton exitbt = new JButton(exitbutton);
+
+	private JButton leftBt = new JButton(leftButton);
+	private JButton rightBt = new JButton(rightButton);
+
+
 	// create a variable to mouse coordinates
 	private int mouseX, mouseY;
+
+	private boolean isMainScreen = false;
 
 	// initialization/RhythmGame.java
 	public RhythmGame() {
@@ -129,7 +145,11 @@ public class RhythmGame extends JFrame {
 				buttonEnteredMusic.start();
 				startbt.setVisible(false);
 				exitbt.setVisible(false);
+				leftBt.setVisible(true);
+				rightBt.setVisible(true);
+
 				background = new ImageIcon(Main.class.getResource("../images/inMenuBackground.jpg")).getImage();
+				isMainScreen = true;
 			}
 		});
 		add(startbt);
@@ -168,10 +188,69 @@ public class RhythmGame extends JFrame {
 		});
 		add(exitbt);
 
+		leftBt.setVisible(false);
+		leftBt.setBounds(250, 310, 60, 60);
+		leftBt.setBorderPainted(false);
+		leftBt.setContentAreaFilled(false);
+		leftBt.setFocusPainted(false);
+		leftBt.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				leftBt.setIcon(leftButtonOn);
+				leftBt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);
+				buttonEnteredMusic.start();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				leftBt.setIcon(leftButton);
+				leftBt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
+				buttonEnteredMusic.start();
+				//left button event
+			}
+		});
+		add(leftBt);
+
+		rightBt.setVisible(false);
+		rightBt.setBounds(960, 310, 60, 60);
+		rightBt.setBorderPainted(false);
+		rightBt.setContentAreaFilled(false);
+		rightBt.setFocusPainted(false);
+		rightBt.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				rightBt.setIcon(rightButtonOn);
+				rightBt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);
+				buttonEnteredMusic.start();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				rightBt.setIcon(rightButton);
+				rightBt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
+				buttonEnteredMusic.start();
+				//right button event
+			}
+		});
+		add(rightBt);
+
 
 		background = new ImageIcon(Main.class.getResource("../images/mainbackground.jpg")).getImage();
 		// Based on the location of the main class, place the image file into the introbackground as an instance.
 		Music introMusic = new Music("Hawn(mainbgm).mp3", true);
+
 		introMusic.start();
 
 	}
@@ -190,8 +269,13 @@ public class RhythmGame extends JFrame {
 	public void screenDraw(Graphics g) {
 		g.drawImage(background, 0, 0, null);
 		// simple image draw method, ex) background
+		if (isMainScreen) {
+			g.drawImage(selectedImage, 340, 100, null);
+			g.drawImage(titleImage, 340, 550, null);
+		}
 		paintComponents(g);
 		// additional pictures draw method -> implement always fixed menu button
+		// add code is view with paintComponents method
 		this.repaint();
 	}
 }
