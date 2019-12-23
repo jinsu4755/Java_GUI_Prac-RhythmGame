@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,9 +34,9 @@ public class RhythmGame extends JFrame {
 	private ImageIcon rightButtonOn = new ImageIcon(Main.class.getResource("../images/buttons/rightButtonOn.png"));
 
 
-	private Image background; // background image object
-	private Image titleImage = new ImageIcon(Main.class.getResource("../images/musicImage/Drive_YuYoon.png")).getImage();
-	private Image selectedImage = new ImageIcon(Main.class.getResource("../images/musicImage/Drive_with_my_friend_intro.png")).getImage();
+	private Image background = new ImageIcon(Main.class.getResource("../images/mainbackground.jpg")).getImage();
+	// background image object
+	// Based on the location of the main class, place the image file into the introbackground as an instance.
 
 	private JLabel menubar = new JLabel(new ImageIcon(Main.class.getResource("../images/menu/menubar.jpg")));
 	private JButton exitMenubt = new JButton(exitMenuButton);
@@ -51,6 +52,14 @@ public class RhythmGame extends JFrame {
 
 	private boolean isMainScreen = false;
 
+	// Music list
+	ArrayList<Track> trackList = new ArrayList<Track>();
+	private Image titleImage;
+	private Image selectedImage;
+	private Music selectedMusic;
+
+	private int nowSelected = 0;
+
 	// initialization/RhythmGame.java
 	public RhythmGame() {
 		setUndecorated(true);
@@ -64,6 +73,25 @@ public class RhythmGame extends JFrame {
 		setBackground(new Color(0, 0, 0, 0));
 		// when drawing images such as buttons as paintComponents, make the background transparent.
 		setLayout(null);
+
+		Music introMusic = new Music("Hawn(mainbgm).mp3", true);
+		introMusic.start();
+
+		trackList.add(new Track("Drive_YuYoon.png",
+				"Drive_with_my_friend_intro.png",
+				"Drive_with_my_friend_main.png",
+				"Drive_with_my_friend(select).mp3",
+				"Drive_with_my_friend.mp3"));
+		trackList.add(new Track("jack_YuYoon.png",
+				"jack_O_Lantern_intro.png",
+				"jack_O_Lantern_main.png",
+				"Jack_O_Lantern(select).mp3",
+				"Jack_O_Lantern.mp3"));
+		trackList.add(new Track("Stellar_Beatmin.png",
+				"Stellar_cocktail_intro.png",
+				"Stellar_cocktail_main.png",
+				"Stellar_cocktail(select).mp3",
+				"Stellar_cocktail.mp3"));
 
 		exitMenubt.setBounds(1230, 0, 45, 30);
 		exitMenubt.setBorderPainted(false);
@@ -143,6 +171,8 @@ public class RhythmGame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
 				buttonEnteredMusic.start();
+				introMusic.close();
+				selectedTrack(0);
 				startbt.setVisible(false);
 				exitbt.setVisible(false);
 				leftBt.setVisible(true);
@@ -213,6 +243,7 @@ public class RhythmGame extends JFrame {
 				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
 				buttonEnteredMusic.start();
 				//left button event
+				selectLeft();
 			}
 		});
 		add(leftBt);
@@ -242,16 +273,11 @@ public class RhythmGame extends JFrame {
 				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
 				buttonEnteredMusic.start();
 				//right button event
+				selectRight();
 			}
 		});
 		add(rightBt);
 
-
-		background = new ImageIcon(Main.class.getResource("../images/mainbackground.jpg")).getImage();
-		// Based on the location of the main class, place the image file into the introbackground as an instance.
-		Music introMusic = new Music("Hawn(mainbgm).mp3", true);
-
-		introMusic.start();
 
 	}
 
@@ -277,5 +303,33 @@ public class RhythmGame extends JFrame {
 		// additional pictures draw method -> implement always fixed menu button
 		// add code is view with paintComponents method
 		this.repaint();
+	}
+
+	public void selectedTrack(int nowSelected) {
+		if (selectedMusic != null) {
+			selectedMusic.close();
+		}
+		titleImage = new ImageIcon(Main.class.getResource("../images/musicImage/"+trackList.get(nowSelected).getTitleImage())).getImage();
+		selectedImage = new ImageIcon(Main.class.getResource("../images/musicImage/" + trackList.get(nowSelected).getStartImage())).getImage();
+		selectedMusic = new Music(trackList.get(nowSelected).getStartMusic(), true);
+		selectedMusic.start();
+	}
+
+	public void selectLeft() {
+		if (nowSelected == 0) {
+			nowSelected = trackList.size() - 1;
+		} else {
+			nowSelected--;
+		}
+		selectedTrack(nowSelected);
+	}
+
+	public void selectRight() {
+		if (nowSelected == trackList.size() - 1) {
+			nowSelected = 0;
+		} else {
+			nowSelected++;
+		}
+		selectedTrack(nowSelected);
 	}
 }
