@@ -38,6 +38,9 @@ public class RhythmGame extends JFrame {
 	private ImageIcon hardButton = new ImageIcon(Main.class.getResource("../images/buttons/hardButton.png"));
 	private ImageIcon hardButtonOn = new ImageIcon(Main.class.getResource("../images/buttons/hardButtonOn.png"));
 	//
+    private ImageIcon backButton = new ImageIcon(Main.class.getResource("../images/buttons/backButton.png"));
+    private ImageIcon backButtonOn = new ImageIcon(Main.class.getResource("../images/buttons/backButtonOn.png"));
+    //
 	private Image background = new ImageIcon(Main.class.getResource("../images/mainbackground.jpg")).getImage();
 	// background image object
 	// Based on the location of the main class, place the image file into the introbackground as an instance.
@@ -53,7 +56,8 @@ public class RhythmGame extends JFrame {
 	//
 	private JButton easyBt = new JButton(easyButton);
 	private JButton hardBt = new JButton(hardButton);
-
+    //
+    private JButton backBt = new JButton(backButton);
 	// create a variable to mouse coordinates//
 	private int mouseX, mouseY;
 
@@ -66,6 +70,8 @@ public class RhythmGame extends JFrame {
 	private Music selectedMusic;
 
 	private int nowSelected = 0;
+
+	private Music introMusic = new Music("Hawn(mainbgm).mp3", true);
 
 	// initialization/RhythmGame.java
 	public RhythmGame() {
@@ -81,7 +87,6 @@ public class RhythmGame extends JFrame {
 		// when drawing images such as buttons as paintComponents, make the background transparent.
 		setLayout(null);
 
-		Music introMusic = new Music("Hawn(mainbgm).mp3", true);
 		introMusic.start();
 
 		trackList.add(new Track("Drive_YuYoon.png",
@@ -178,17 +183,7 @@ public class RhythmGame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
 				buttonEnteredMusic.start();
-				introMusic.close();
-				selectedTrack(0);
-				startbt.setVisible(false);
-				exitbt.setVisible(false);
-				leftBt.setVisible(true);
-				rightBt.setVisible(true);
-				easyBt.setVisible(true);
-				hardBt.setVisible(true);
-
-				background = new ImageIcon(Main.class.getResource("../images/inMenuBackground.jpg")).getImage();
-				isMainScreen = true;
+				enterMain();
 			}
 		});
 		add(startbt);
@@ -347,6 +342,36 @@ public class RhythmGame extends JFrame {
 		});
 		add(hardBt);
 
+        backBt.setVisible(false);
+        backBt.setBounds(20, 50, 60, 60);
+        backBt.setBorderPainted(false);
+        backBt.setContentAreaFilled(false);
+        backBt.setFocusPainted(false);
+        backBt.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                backBt.setIcon(backButtonOn);
+                backBt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                Music buttonEnteredMusic = new Music("buttonEnteredMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                backBt.setIcon(backButton);
+                backBt.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
+                buttonEnteredMusic.start();
+                //back event -> to main screen
+				backMain();
+            }
+        });
+        add(backBt);
+
 
 	}
 
@@ -407,10 +432,38 @@ public class RhythmGame extends JFrame {
 			selectedMusic.close();
 		}
 		isMainScreen = false;
-		leftBt.setVisible(false);
-		rightBt.setVisible(false);
-		easyBt.setVisible(false);
-		hardBt.setVisible(false);
+		setMainButton(false);
 		background = new ImageIcon(Main.class.getResource("../images/musicImage/"+trackList.get(nowSelected).getGameImage())).getImage();
+		backBt.setVisible(true);
+	}
+
+	private void intoMain() {
+		background = new ImageIcon(Main.class.getResource("../images/inMenuBackground.jpg")).getImage();
+		isMainScreen = true;
+	}
+
+	private void setMainButton(boolean bool) {
+		leftBt.setVisible(bool);
+		rightBt.setVisible(bool);
+		easyBt.setVisible(bool);
+		hardBt.setVisible(bool);
+	}
+
+	public void backMain() {
+		intoMain();
+		setMainButton(true);
+
+		backBt.setVisible(false);
+		selectedTrack(nowSelected);
+	}
+
+	public void enterMain() {
+		intoMain();
+		startbt.setVisible(false);
+		exitbt.setVisible(false);
+		setMainButton(true);
+		introMusic.close();
+
+		selectedTrack(0);
 	}
 }
