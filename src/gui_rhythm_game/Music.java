@@ -4,6 +4,8 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+
+import javazoom.jl.player.JavaSoundAudioDevice;
 import javazoom.jl.player.Player;
 
 public class Music extends Thread {
@@ -14,6 +16,8 @@ public class Music extends Thread {
     private FileInputStream fis;
     private BufferedInputStream bis;
 
+
+
     public Music(String name, boolean isLoop) {
         // play 할 음악 이름과 반복 여부를 받는다.
         try {
@@ -21,8 +25,7 @@ public class Music extends Thread {
             file = new File(Main.class.getResource("../music/"+ name).toURI());
             fis = new FileInputStream(file);
             bis = new BufferedInputStream(fis);
-            player = new Player(bis);
-
+            player = new Player(bis, new JavaSoundAudioDevice());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -42,6 +45,8 @@ public class Music extends Thread {
         this.interrupt();
         // 해당 쓰레드를 중지 상태로 만든다.
     }
+
+
 
     @Override
     public void run() {

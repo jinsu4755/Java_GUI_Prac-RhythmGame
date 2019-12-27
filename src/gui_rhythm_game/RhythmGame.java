@@ -73,7 +73,7 @@ public class RhythmGame extends JFrame {
 
 	private Music introMusic = new Music("Hawn(mainbgm).mp3", true);
 
-	public static Game game = new Game();
+	public static Game game;
 
 	// initialization/RhythmGame.java
 	public RhythmGame() {
@@ -97,17 +97,20 @@ public class RhythmGame extends JFrame {
 				"Drive_with_my_friend_intro.png",
 				"Drive_with_my_friend_main.png",
 				"Drive_with_my_friend(select).mp3",
-				"Drive_with_my_friend.mp3"));
+				"Drive_with_my_friend.mp3",
+				"Drive with my friend"));
 		trackList.add(new Track("jack_YuYoon.png",
 				"jack_O_Lantern_intro.png",
 				"jack_O_Lantern_main.png",
 				"Jack_O_Lantern(select).mp3",
-				"Jack_O_Lantern.mp3"));
+				"Jack_O_Lantern.mp3",
+				"Jack O Lantern"));
 		trackList.add(new Track("Stellar_Beatmin.png",
 				"Stellar_cocktail_intro.png",
 				"Stellar_cocktail_main.png",
 				"Stellar_cocktail(select).mp3",
-				"Stellar_cocktail.mp3"));
+				"Stellar_cocktail.mp3",
+				"Stellar cocktail"));
 
 		exitMenubt.setBounds(1230, 0, 45, 30);
 		exitMenubt.setBorderPainted(false);
@@ -311,7 +314,7 @@ public class RhythmGame extends JFrame {
 				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
 				buttonEnteredMusic.start();
 				//easy event
-				gameStart(nowSelected, "easy");
+				gameStart(nowSelected, "Easy");
 			}
 		});
 		add(easyBt);
@@ -341,7 +344,7 @@ public class RhythmGame extends JFrame {
 				Music buttonEnteredMusic = new Music("buttonPressedMusic.mp3", false);
 				buttonEnteredMusic.start();
 				//hard event
-				gameStart(nowSelected, "hard");
+				gameStart(nowSelected, "Hard");
 			}
 		});
 		add(hardBt);
@@ -445,6 +448,7 @@ public class RhythmGame extends JFrame {
 		isGameScreen = true;
 		setFocusable(true);
 		requestFocus();
+		game = new Game(trackList.get(nowSelected).getTitleName(), difficulty, trackList.get(nowSelected).getGameMusic());
 	}
 
 	private void intoMain() {
@@ -466,6 +470,7 @@ public class RhythmGame extends JFrame {
 		backBt.setVisible(false);
 		selectedTrack(nowSelected);
 		isGameScreen = false;
+		game.close();
 	}
 
 	public void enterMain() {
